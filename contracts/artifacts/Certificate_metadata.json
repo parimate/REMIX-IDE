@@ -18,7 +18,7 @@
 						"type": "uint256"
 					}
 				],
-				"name": "StudentCertificate",
+				"name": "_StudentCertificate",
 				"outputs": [
 					{
 						"internalType": "string",
@@ -52,8 +52,42 @@
 			{
 				"inputs": [
 					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "_allAdmin",
+				"outputs": [
+					{
 						"internalType": "address",
-						"name": "_authorizedIssuers",
+						"name": "addminAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "adminId",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "position",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "addminAddress",
 						"type": "address"
 					},
 					{
@@ -75,94 +109,6 @@
 				"name": "addAdmin",
 				"outputs": [],
 				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "viewers",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "timestamp",
-						"type": "uint256"
-					}
-				],
-				"name": "addViewer",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"name": "authorizedIssuers",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "getAdmin",
-				"outputs": [
-					{
-						"internalType": "string",
-						"name": "name",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "id",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "position",
-						"type": "string"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "getCertificate",
-				"outputs": [
-					{
-						"internalType": "string",
-						"name": "studentName",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "studentId",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "faculty",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "department",
-						"type": "string"
-					}
-				],
-				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -212,77 +158,33 @@
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "studentAddress",
-						"type": "address"
-					}
-				],
-				"name": "viewCertificate",
-				"outputs": [
-					{
-						"internalType": "string",
-						"name": "studentName",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "studentId",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "faculty",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "department",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "accessTime",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"inputs": [],
-				"name": "viewStudent",
+				"name": "viewAdmin",
 				"outputs": [
 					{
 						"components": [
 							{
+								"internalType": "address",
+								"name": "addminAddress",
+								"type": "address"
+							},
+							{
 								"internalType": "string",
-								"name": "studentName",
+								"name": "name",
 								"type": "string"
 							},
 							{
 								"internalType": "string",
-								"name": "studentId",
+								"name": "adminId",
 								"type": "string"
 							},
 							{
 								"internalType": "string",
-								"name": "faculty",
+								"name": "position",
 								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "department",
-								"type": "string"
-							},
-							{
-								"internalType": "uint256",
-								"name": "accessTime",
-								"type": "uint256"
 							}
 						],
-						"internalType": "struct Certificate.Student[]",
+						"internalType": "struct Certificate.Admin[]",
 						"name": "",
 						"type": "tuple[]"
 					}
@@ -319,11 +221,11 @@
 	},
 	"sources": {
 		"contracts/setAccessTime.sol": {
-			"keccak256": "0xe1839e449612d08da3dc4f70f919ee1bd7f41e124707e0b9fbd093debbbcb715",
+			"keccak256": "0xdfc6daebe5d70edb30270f6bce87eec4a0b4af6391bcda906ecca1f8061c7d6b",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://33c13d88068c11d27071dacd91c129d072a636f04c7c0e46241a3a251f7c5735",
-				"dweb:/ipfs/QmeRSA8cURL1dV4kcS2ZbpPkNBYS5ojmxzm8z6sTDreJ39"
+				"bzz-raw://a9a78eea9aeb629f3ce37d67c3b926beaf406f95807a548f274b32d2471a5637",
+				"dweb:/ipfs/QmbcgUBe5Nn4WEK8ahJqK4iYqHUTxt7N2DpruECXMDs8w1"
 			]
 		}
 	},
