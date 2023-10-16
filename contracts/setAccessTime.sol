@@ -3,7 +3,7 @@ pragma solidity ^0.8.10;
 
 contract Certificate {
     struct Student {
-        address studentAddress;
+        address studentAddress; // Address นักศึกษา
         string certificateName; // ชื่อใบประกาศนียบัตร
         string studentName;     // ชื่อ-นามสกุลของนักศึกษา
         string studentId;       // รหัสนักศึกษา
@@ -11,16 +11,16 @@ contract Certificate {
         string department;      // ภาควิชา
         uint256 accessTime;     // เวลาที่อนุญาตให้เข้าดูข้อมูล
         bool revokedStatus;     // สถานะเพิกถอนใบประกาศนียบัตร
-        string issuedName;      //ชื่อผู้ออกใบประกาศนียบัตร
+        string issuedName;      // ชื่อผู้ออกใบประกาศนียบัตร
         address issuedAddress; 
     }
 
     struct Admin {
-        address addminAddress;
-        string name; // ชื่อ-นามสกุล
-        string adminId; // รหัสประจำตัว
-        string position; // ตำแหน่งหน้าที่
-        bool adminStatus; //สถานะ admin
+        address addminAddress;  // Address Admin
+        string name;            // ชื่อ-นามสกุล
+        string adminId;         // รหัสประจำตัว
+        string position;        // ตำแหน่งหน้าที่
+        bool adminStatus;       // สถานะ admin
     }
 
     Student[] public _StudentCertificate;
@@ -29,8 +29,8 @@ contract Certificate {
     mapping(address => bool) private authorizedIssuers; // รายชื่อผู้ที่มีสิทธิ์ในการออกใบประกาศนียบัตร
     mapping(address => bool) private authorizedViewers; // รายชื่อผู้ที่มีสิทธิ์ในการดูข้อมูลใบประกาศนียบัตร
     mapping(address => bool) private authorizedStudent; // รายชื่อนักศึกษาเจ้าของใบประกาศนียบัตร
-    mapping(address => Student) private students; // ข้อมูลใบประกาศนียบัตรของนักศึกษา
-    mapping(address => Admin) private admins; // ข้อมูลใบผู้ที่มีสิทธิ์ในการออกใบประกาศนียบัตร
+    mapping(address => Student) private students;       // ข้อมูลใบประกาศนียบัตรของนักศึกษา
+    mapping(address => Admin) private admins;           // ข้อมูลใบผู้ที่มีสิทธิ์ในการออกใบประกาศนียบัตร
     mapping(address => uint256) private viewerAccessTimes; // เก็บเวลาการเข้าถึงของผู้เข้าชม
 
     constructor() {
