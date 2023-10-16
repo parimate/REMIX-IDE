@@ -3,13 +3,16 @@ pragma solidity ^0.8.10;
 
 contract Certificate {
     struct Student {
-        //address studentAddress;
-        string studentName; // ชื่อ-นามสกุลของนักศึกษา
-        string studentId; // รหัสนักศึกษา
-        string faculty; // คณะ
-        string department; // ภาควิชา
-        uint256 accessTime; // เวลาที่อนุญาตให้เข้าดูข้อมูล
-        // bool revokedStatus;   // สถานะเพิกถอนใบประกาศนียบัตร
+        address studentAddress;
+        string certificateName; // ชื่อใบประกาศนียบัตร
+        string studentName;     // ชื่อ-นามสกุลของนักศึกษา
+        string studentId;       // รหัสนักศึกษา
+        string faculty;         // คณะ
+        string department;      // ภาควิชา
+        uint256 accessTime;     // เวลาที่อนุญาตให้เข้าดูข้อมูล
+        bool revokedStatus;     // สถานะเพิกถอนใบประกาศนียบัตร
+        string issuedName;      //ชื่อผู้ออกใบประกาศนียบัตร
+        address issuedAddress; 
     }
 
     struct Admin {
@@ -17,6 +20,7 @@ contract Certificate {
         string name; // ชื่อ-นามสกุล
         string adminId; // รหัสประจำตัว
         string position; // ตำแหน่งหน้าที่
+        bool adminStatus; //สถานะ admin
     }
 
     Student[] public _StudentCertificate;
@@ -34,17 +38,26 @@ contract Certificate {
     }
 
     modifier onlyAuthorizedIssuer() {
-        require(authorizedIssuers[msg.sender], "Only authorized issuers can call this function");
+        require(
+            authorizedIssuers[msg.sender],
+            "Only authorized issuers can call this function"
+        );
         _;
     }
 
     modifier onlyAuthorizedViewer() {
-        require(authorizedViewers[msg.sender], "Only authorized viewers can call this function");
+        require(
+            authorizedViewers[msg.sender],
+            "Only authorized viewers can call this function"
+        );
         _;
     }
 
     modifier onlyStudent() {
-        require(authorizedStudent[msg.sender],"Only student can call this function");
+        require(
+            authorizedStudent[msg.sender],
+            "Only student can call this function"
+        );
         _;
     }
 
@@ -58,13 +71,22 @@ contract Certificate {
         admin.name = name;
         admin.adminId = adminId;
         admin.position = position;
-        _allAdmin.push(Admin(addminAddress, name, adminId, position));
+        admin.adminStatus = true;
+        _allAdmin.push(Admin(addminAddress, name, adminId, position, true));
     }
 
-
     // ลบรายชื่อออกจากผู้มีสิทธิ์ออกใบประกาศนียบัตร
-    function removeAdmin(address _authorizedIssuers) external onlyAuthorizedIssuer{
-        authorizedIssuers[_authorizedIssuers] = false;
+    function removeAdmin(address addminAddress) external onlyAuthorizedIssuer{
+        authorizedIssuers[addminAddress] = false;
+        Admin storage admin = admins[addminAddress];
+        admin.adminStatus = false;
+
+        for (uint i = 0; i < _allAdmin.length; i++) {
+            if (_allAdmin[i].addminAddress == addminAddress) {
+                _allAdmin[i].adminStatus = false;
+                 break;  // หากพบ admin แล้วก็ออกจาก loop
+            }
+        }
     }
 
     // function getAdmin() public view returns (
@@ -75,21 +97,20 @@ contract Certificate {
     // {
     //     require(authorizedIssuers[msg.sender],"You are not authorized to run this function.");
     //     Admin storage admin = admins[msg.sender];
-    //     return (admin.name, admin.adminId, admin.position);        
+    //     return (admin.name, admin.adminId, admin.position);
     // }
 
-    function viewAdmin() public view returns (Admin[] memory) {
-        uint256 numAdmin = _allAdmin.length;
-        Admin[] memory Admins = new Admin[](numAdmin);
+    // function viewAdmin() public view onlyAuthorizedIssuer returns (Admin[] memory) {
+    //     require(authorizedIssuers[msg.sender],"You are not authorized to run this function.");
+    //     uint256 numAdmin = _allAdmin.length;
+    //     Admin[] memory Admins = new Admin[](numAdmin);
 
-        for (uint256 i = 0; i < numAdmin; i++) {
-            Admins[i] = _allAdmin[i];
-        }
+    //     for (uint256 i = 0; i < numAdmin; i++) {
+    //         Admins[i] = _allAdmin[i];
+    //     }
 
-        return Admins;
-    }
-
-    
+    //     return Admins;
+    // }
 
     //----------------------------------------------------------------------------------------------//
 
@@ -113,6 +134,7 @@ contract Certificate {
     // ออกใบประกาศนียบัตรโดยผู้ออกใบประกาศนียบัตร
     function issueCertificate(
         address studentAddress,
+        string memory certificateName, 
         string memory studentName,
         string memory studentId,
         string memory faculty,
@@ -120,15 +142,44 @@ contract Certificate {
     ) external onlyAuthorizedIssuer {
         authorizedStudent[studentAddress] = true; // เพิ่มที่อยู่ของนักเรียนให้กับนักเรียนที่ได้รับอนุญาต
         Student storage student = students[studentAddress];
+        student.studentAddress = studentAddress;
+        student.certificateName = certificateName;
         student.studentName = studentName;
         student.studentId = studentId;
         student.faculty = faculty;
         student.department = department;
+        student.accessTime = 0;
+        student.revokedStatus = false;
+        student.issuedAddress = msg.sender;
+        student.issuedName = admins[msg.sender].name;
 
-        _StudentCertificate.push(Student(studentName, studentId, faculty, department, 0));
+        _StudentCertificate.push(
+            Student(
+                studentAddress,
+                certificateName,
+                studentName,
+                studentId,
+                faculty,
+                department,
+                0,
+                false,
+                admins[msg.sender].name,
+                address(msg.sender)
+            )
+        );
     }
-    
-    
+
+    function revokeCertificate(address studentAddress) external onlyAuthorizedIssuer{
+        Student storage student = students[studentAddress];
+        student.revokedStatus = true;
+
+        for (uint i = 0; i < _StudentCertificate.length; i++) {
+            if (_StudentCertificate[i].studentAddress == studentAddress) {
+                _StudentCertificate[i].revokedStatus = true;
+                 break;  
+            }
+        }
+    }
 
     // function viewStudent() public view returns (Student[] memory) {
     //     uint256 numCertificates = StudentCertificate.length;

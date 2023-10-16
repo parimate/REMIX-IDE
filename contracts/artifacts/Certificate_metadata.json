@@ -21,6 +21,16 @@
 				"name": "_StudentCertificate",
 				"outputs": [
 					{
+						"internalType": "address",
+						"name": "studentAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "certificateName",
+						"type": "string"
+					},
+					{
 						"internalType": "string",
 						"name": "studentName",
 						"type": "string"
@@ -44,6 +54,21 @@
 						"internalType": "uint256",
 						"name": "accessTime",
 						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "revokedStatus",
+						"type": "bool"
+					},
+					{
+						"internalType": "string",
+						"name": "issuedName",
+						"type": "string"
+					},
+					{
+						"internalType": "address",
+						"name": "issuedAddress",
+						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -78,6 +103,11 @@
 						"internalType": "string",
 						"name": "position",
 						"type": "string"
+					},
+					{
+						"internalType": "bool",
+						"name": "adminStatus",
+						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
@@ -120,6 +150,11 @@
 					},
 					{
 						"internalType": "string",
+						"name": "certificateName",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
 						"name": "studentName",
 						"type": "string"
 					},
@@ -148,7 +183,7 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "_authorizedIssuers",
+						"name": "addminAddress",
 						"type": "address"
 					}
 				],
@@ -158,38 +193,16 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "viewAdmin",
-				"outputs": [
+				"inputs": [
 					{
-						"components": [
-							{
-								"internalType": "address",
-								"name": "addminAddress",
-								"type": "address"
-							},
-							{
-								"internalType": "string",
-								"name": "name",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "adminId",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "position",
-								"type": "string"
-							}
-						],
-						"internalType": "struct Certificate.Admin[]",
-						"name": "",
-						"type": "tuple[]"
+						"internalType": "address",
+						"name": "studentAddress",
+						"type": "address"
 					}
 				],
-				"stateMutability": "view",
+				"name": "revokeCertificate",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			}
 		],
@@ -221,11 +234,11 @@
 	},
 	"sources": {
 		"contracts/setAccessTime.sol": {
-			"keccak256": "0xdfc6daebe5d70edb30270f6bce87eec4a0b4af6391bcda906ecca1f8061c7d6b",
+			"keccak256": "0xd0e636718f3ee43ce9d00308987d82768256341547658603abb8b68fde53c273",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://a9a78eea9aeb629f3ce37d67c3b926beaf406f95807a548f274b32d2471a5637",
-				"dweb:/ipfs/QmbcgUBe5Nn4WEK8ahJqK4iYqHUTxt7N2DpruECXMDs8w1"
+				"bzz-raw://f8e9a0aeb58baea9e11bc98bbc0478ae530466a392df0c4fbbbf00157de31649",
+				"dweb:/ipfs/Qmd7nxwg7fj1oFShGrWy5jPJQh92zMR8ZARVgRi4SRR32V"
 			]
 		}
 	},
