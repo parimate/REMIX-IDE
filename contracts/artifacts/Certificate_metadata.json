@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.18+commit.87f61d96"
+		"version": "0.8.22+commit.4fc1097e"
 	},
 	"language": "Solidity",
 	"output": {
@@ -142,6 +142,24 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "checkRevokedCertificate",
+				"outputs": [
+					{
+						"internalType": "address[]",
+						"name": "",
+						"type": "address[]"
+					},
+					{
+						"internalType": "string[]",
+						"name": "",
+						"type": "string[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -183,19 +201,6 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "addminAddress",
-						"type": "address"
-					}
-				],
-				"name": "removeAdmin",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
 						"name": "studentAddress",
 						"type": "address"
 					}
@@ -219,9 +224,9 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/setAccessTime.sol": "Certificate"
+			"contracts/Certificate.sol": "Certificate"
 		},
-		"evmVersion": "paris",
+		"evmVersion": "shanghai",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -233,12 +238,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/setAccessTime.sol": {
-			"keccak256": "0xa48cc4ef52ef346c66863e3cf6d6c5466c7e7cafc99be59ccd2d7ad1cd49f0ec",
+		"contracts/Certificate.sol": {
+			"keccak256": "0x6544f2ed66ec08dc5d03e045fb22b977aacdd11e11e84defe8d41446c1f44de2",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://c5ef51ac018319ca2aa94bf0bc303d9b2068442ec96a2783dfb94dcdb81880dc",
-				"dweb:/ipfs/QmbJnZUyhLLYqHeBZRtcYCX4X2NjsXA3Dz8v2r7P7GVEXV"
+				"bzz-raw://bbb61e62aeb02e833b9c25d666226699af85dfe5b124bbac79d36efd7863cedf",
+				"dweb:/ipfs/QmchMm1iA7phdawa6Fjy27x1W8iSBSQx1MPVRUVzqLReTA"
 			]
 		}
 	},

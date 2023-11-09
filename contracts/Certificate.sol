@@ -1,26 +1,26 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.10;
+pragma solidity ^0.8.18;
 
 contract Certificate {
     struct Student {
         address studentAddress; // Address นักศึกษา
         string certificateName; // ชื่อใบประกาศนียบัตร
-        string studentName;     // ชื่อ-นามสกุลของนักศึกษา
-        string studentId;       // รหัสนักศึกษา
-        string faculty;         // คณะ
-        string department;      // ภาควิชา
-        uint256 accessTime;     // เวลาที่อนุญาตให้เข้าดูข้อมูล
-        bool revokedStatus;     // สถานะเพิกถอนใบประกาศนียบัตร
-        string issuedName;      // ชื่อผู้ออกใบประกาศนียบัตร
-        address issuedAddress; 
+        string studentName; // ชื่อ-นามสกุลของนักศึกษา
+        string studentId; // รหัสนักศึกษา
+        string faculty; // คณะ
+        string department; // ภาควิชา
+        uint256 accessTime; // เวลาที่อนุญาตให้เข้าดูข้อมูล
+        bool revokedStatus; // สถานะเพิกถอนใบประกาศนียบัตร
+        string issuedName; // ชื่อผู้ออกใบประกาศนียบัตร
+        address issuedAddress; // Address ผู้ออกใบประกาศนียบัตร
     }
 
     struct Admin {
-        address addminAddress;  // Address Admin
-        string name;            // ชื่อ-นามสกุล
-        string adminId;         // รหัสประจำตัว
-        string position;        // ตำแหน่งหน้าที่
-        bool adminStatus;       // สถานะ admin
+        address addminAddress; // Address Admin
+        string name; // ชื่อ-นามสกุล
+        string adminId; // รหัสประจำตัว
+        string position; // ตำแหน่งหน้าที่
+        bool adminStatus; // สถานะ Admin
     }
 
     Student[] public _StudentCertificate;
@@ -29,8 +29,8 @@ contract Certificate {
     mapping(address => bool) private authorizedIssuers; // รายชื่อผู้ที่มีสิทธิ์ในการออกใบประกาศนียบัตร
     mapping(address => bool) private authorizedViewers; // รายชื่อผู้ที่มีสิทธิ์ในการดูข้อมูลใบประกาศนียบัตร
     mapping(address => bool) private authorizedStudent; // รายชื่อนักศึกษาเจ้าของใบประกาศนียบัตร
-    mapping(address => Student) private students;       // ข้อมูลใบประกาศนียบัตรของนักศึกษา
-    mapping(address => Admin) private admins;           // ข้อมูลใบผู้ที่มีสิทธิ์ในการออกใบประกาศนียบัตร
+    mapping(address => Student) private students; // ข้อมูลใบประกาศนียบัตรของนักศึกษา
+    mapping(address => Admin) private admins; // ข้อมูลใบผู้ที่มีสิทธิ์ในการออกใบประกาศนียบัตร
     mapping(address => uint256) private viewerAccessTimes; // เก็บเวลาการเข้าถึงของผู้เข้าชม
 
     constructor() {
@@ -39,32 +39,29 @@ contract Certificate {
 
     modifier onlyAuthorizedIssuer() {
         require(
-            authorizedIssuers[msg.sender],
-            "Only authorized issuers can call this function"
-        );
+            authorizedIssuers[msg.sender],"Only authorized issuers can call this function");
         _;
     }
 
     modifier onlyAuthorizedViewer() {
-        require(
-            authorizedViewers[msg.sender],
-            "Only authorized viewers can call this function"
-        );
+        require(authorizedViewers[msg.sender],"Only authorized viewers can call this function");
         _;
     }
 
     modifier onlyStudent() {
-        require(
-            authorizedStudent[msg.sender],
-            "Only student can call this function"
-        );
+        require(authorizedStudent[msg.sender],"Only student can call this function");
         _;
     }
 
     //----------------------------------------------------------------------------------------------//
 
     // เพิ่มรายชื่อผู้มีสิทธิ์ออกใบประกาศนียบัตร
-    function addAdmin(address addminAddress, string memory name, string memory adminId, string memory position) external onlyAuthorizedIssuer {
+    function addAdmin(
+        address addminAddress,
+        string memory name,
+        string memory adminId,
+        string memory position
+    ) external onlyAuthorizedIssuer {
         authorizedIssuers[addminAddress] = true;
         Admin storage admin = admins[addminAddress];
         admin.addminAddress = addminAddress;
@@ -75,19 +72,19 @@ contract Certificate {
         _allAdmin.push(Admin(addminAddress, name, adminId, position, true));
     }
 
-    // ลบรายชื่อออกจากผู้มีสิทธิ์ออกใบประกาศนียบัตร
-    function removeAdmin(address addminAddress) external onlyAuthorizedIssuer{
-        authorizedIssuers[addminAddress] = false;
-        Admin storage admin = admins[addminAddress];
-        admin.adminStatus = false;
+    // // ลบรายชื่อออกจากผู้มีสิทธิ์ออกใบประกาศนียบัตร
+    // function removeAdmin(address addminAddress) external onlyAuthorizedIssuer {
+    //     authorizedIssuers[addminAddress] = false;
+    //     Admin storage admin = admins[addminAddress];
+    //     admin.adminStatus = false;
 
-        for (uint i = 0; i < _allAdmin.length; i++) {
-            if (_allAdmin[i].addminAddress == addminAddress) {
-                _allAdmin[i].adminStatus = false;
-                 break;  // หากพบ admin แล้วก็ออกจาก loop
-            }
-        }
-    }
+    //     for (uint256 i = 0; i < _allAdmin.length; i++) {
+    //         if (_allAdmin[i].addminAddress == addminAddress) {
+    //             _allAdmin[i].adminStatus = false;
+    //             break; // หากพบ admin แล้วก็ออกจาก loop
+    //         }
+    //     }
+    // }
 
     // function getAdmin() public view returns (
     //         string memory name,
@@ -134,7 +131,7 @@ contract Certificate {
     // ออกใบประกาศนียบัตรโดยผู้ออกใบประกาศนียบัตร
     function issueCertificate(
         address studentAddress,
-        string memory certificateName, 
+        string memory certificateName,
         string memory studentName,
         string memory studentId,
         string memory faculty,
@@ -169,17 +166,52 @@ contract Certificate {
         );
     }
 
-    function revokeCertificate(address studentAddress) external onlyAuthorizedIssuer{
+    // ฟังก์ชันเพิกถอนใบประกาศนียบัตร
+    function revokeCertificate(address studentAddress) external onlyAuthorizedIssuer {
+        // นำเข้าข้อมูลของนักศึกษาจาก Mapping
         Student storage student = students[studentAddress];
+        // เพิกถอนสถานะใบประกาศนียบัตรของนักศึกษา
         student.revokedStatus = true;
 
-        for (uint i = 0; i < _StudentCertificate.length; i++) {
+        // วนลูปทุกใบประกาศนียบัตรที่เก็บใน _StudentCertificate
+        for (uint256 i = 0; i < _StudentCertificate.length; i++) {
             if (_StudentCertificate[i].studentAddress == studentAddress) {
+                // เพิกถอนสถานะใบประกาศนียบัตรนี้
                 _StudentCertificate[i].revokedStatus = true;
-                 break;  
+                break;
             }
         }
     }
+
+
+    function checkRevokedCertificate() public view onlyAuthorizedIssuer returns (address[] memory, string[] memory)  {
+        uint revokedCount = 0;
+    
+        // หาจำนวนใบประกาศนียบัตรที่ถูกเพิกถอน
+        for (uint i = 0; i < _StudentCertificate.length; i++) {
+            if (_StudentCertificate[i].revokedStatus) {
+                revokedCount++;
+            }
+        }
+
+        // สร้างอาร์เรย์ขนาดตามจำนวนใบประกาศนียบัตรที่ถูกเพิกถอน
+        address[] memory revokedAddresses = new address[](revokedCount);
+        string[] memory revokedCertificate = new string[](revokedCount);
+    
+        uint index = 0;
+        // เก็บที่อยู่และชื่อใบประกาศนียบัตรของที่ถูกเพิกถอน
+        for (uint i = 0; i < _StudentCertificate.length; i++) {
+    
+            if (_StudentCertificate[i].revokedStatus) {
+                revokedAddresses[index] = _StudentCertificate[i].studentAddress;
+                revokedCertificate[index] = _StudentCertificate[i].studentId;
+                index++;
+            }
+        }
+
+        return (revokedAddresses, revokedCertificate);
+    }
+
 
     // function viewStudent() public view returns (Student[] memory) {
     //     uint256 numCertificates = StudentCertificate.length;
